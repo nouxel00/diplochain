@@ -36,11 +36,9 @@
     justify-content: space-between;
     padding: 1.1rem 2rem;
     border-bottom: 1px solid var(--border);
-    background: rgba(15,30,60,0.95);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(8px);
+    background: #0f1e3c;
+    position: relative;
+    z-index: 10;
   }
 
   .logo {
@@ -94,8 +92,8 @@
   }
 
   /* ── PAGES ── */
-  .page { display: none; padding: 2.5rem 2rem; max-width: 860px; margin: 0 auto; }
-  .page.active { display: block; }
+  .page { display: none !important; padding: 2.5rem 2rem; max-width: 860px; margin: 0 auto; }
+  .page.active { display: block !important; }
 
   /* ── HERO STATS ── */
   .stats-row {
@@ -444,12 +442,67 @@
 
   .toast.show { transform: translateY(0); opacity: 1; }
 
+  /* ── BOTTOM NAV MOBILE ── */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #0f1e3c;
+    border-top: 1px solid var(--border);
+    padding: 8px 0 12px;
+    z-index: 200;
+  }
+
+  .bottom-nav-items {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 10px;
+    transition: all 0.2s;
+    color: var(--muted);
+    font-family: 'Sora', sans-serif;
+  }
+
+  .bottom-nav-item.active { color: var(--gold); }
+
+  .bottom-nav-icon {
+    width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .bottom-nav-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .how-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 2rem; }
+
   /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
+    .how-grid { grid-template-columns: 1fr; }
     .form-grid { grid-template-columns: 1fr; }
     .stats-row { grid-template-columns: 1fr; }
     .diploma-info { grid-template-columns: 1fr; }
-    nav { flex-direction: column; gap: 12px; }
+    nav { padding: 0.8rem 1rem; }
+    .nav-tabs { display: none; }
+    .bottom-nav { display: block; }
+    .page { padding: 1.5rem 1rem 6rem; }
+    .form-card { padding: 1.2rem; }
+    .search-wrap { flex-direction: column; }
+    .btn-search { width: 100%; padding: 13px; }
+    .stat-card { padding: 1rem; }
   }
 </style>
 </head>
@@ -461,10 +514,40 @@
     DiploChain
   </div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('dashboard')">Tableau de bord</button>
-    <button class="nav-tab" onclick="showPage('admin')">Ministère</button>
-    <button class="nav-tab" onclick="showPage('emit')">Établissement</button>
-    <button class="nav-tab" onclick="showPage('verify')">Vérification</button>
+    <button class="nav-tab active" onclick="showPage('dashboard', this)">Tableau de bord</button>
+    <button class="nav-tab" onclick="showPage('admin', this)">Ministère</button>
+    <button class="nav-tab" onclick="showPage('emit', this)">Établissement</button>
+    <button class="nav-tab" onclick="showPage('verify', this)">Vérification</button>
+  </div>
+</nav>
+
+<!-- BOTTOM NAV MOBILE -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-items">
+    <button class="bottom-nav-item active" id="bnav-dashboard" onclick="showPage('dashboard', this, true)">
+      <div class="bottom-nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </div>
+      <span class="bottom-nav-label">Accueil</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-admin" onclick="showPage('admin', this, true)">
+      <div class="bottom-nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <span class="bottom-nav-label">Ministère</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-emit" onclick="showPage('emit', this, true)">
+      <div class="bottom-nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      </div>
+      <span class="bottom-nav-label">Émettre</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-verify" onclick="showPage('verify', this, true)">
+      <div class="bottom-nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <span class="bottom-nav-label">Vérifier</span>
+    </button>
   </div>
 </nav>
 
@@ -480,18 +563,18 @@
   </div>
 
   <div class="section-title">Comment ça marche</div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:2rem;">
-    <div class="stat-card" style="text-align:center;cursor:pointer;" onclick="document.querySelectorAll('.nav-tab')[1].click()">
+  <div class="how-grid">
+    <div class="stat-card" style="text-align:center;cursor:pointer;" onclick="showPage('admin', document.querySelectorAll('.nav-tab')[1])">
       <div style="font-size:1.5rem;margin-bottom:10px;color:var(--gold);">01</div>
       <div style="font-size:0.82rem;font-weight:600;color:var(--white);margin-bottom:6px;">Ministère accrédite</div>
       <div style="font-size:0.75rem;color:var(--muted);line-height:1.5;">Le ministère autorise les établissements à émettre des diplômes</div>
     </div>
-    <div class="stat-card" style="text-align:center;cursor:pointer;" onclick="document.querySelectorAll('.nav-tab')[2].click()">
+    <div class="stat-card" style="text-align:center;cursor:pointer;" onclick="showPage('emit', document.querySelectorAll('.nav-tab')[2])">
       <div style="font-size:1.5rem;margin-bottom:10px;color:var(--gold);">02</div>
       <div style="font-size:0.82rem;font-weight:600;color:var(--white);margin-bottom:6px;">Établissement émet</div>
       <div style="font-size:0.75rem;color:var(--muted);line-height:1.5;">Le diplôme est signé cryptographiquement et gravé sur la blockchain</div>
     </div>
-    <div class="stat-card" style="text-align:center;cursor:pointer;" onclick="document.querySelectorAll('.nav-tab')[3].click()">
+    <div class="stat-card" style="text-align:center;cursor:pointer;" onclick="showPage('verify', document.querySelectorAll('.nav-tab')[3])">
       <div style="font-size:1.5rem;margin-bottom:10px;color:var(--gold);">03</div>
       <div style="font-size:0.82rem;font-weight:600;color:var(--white);margin-bottom:6px;">Recruteur vérifie</div>
       <div style="font-size:0.75rem;color:var(--muted);line-height:1.5;">N'importe qui peut vérifier en 3 secondes, gratuitement</div>
@@ -611,11 +694,26 @@
 <script>
 const API = 'https://diplochain.onrender.com';
 
-function showPage(name) {
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', function() {
+  showPage('dashboard');
+});
+
+function showPage(name, el, isMobile) {
+  // Afficher la bonne page
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  event.target.classList.add('active');
+
+  // Mettre à jour la nav desktop
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const tabs = {'dashboard':0,'admin':1,'emit':2,'verify':3};
+  const tabEl = document.querySelectorAll('.nav-tab')[tabs[name]];
+  if (tabEl) tabEl.classList.add('active');
+
+  // Mettre à jour la nav mobile
+  document.querySelectorAll('.bottom-nav-item').forEach(t => t.classList.remove('active'));
+  const bnav = document.getElementById('bnav-' + name);
+  if (bnav) bnav.classList.add('active');
 }
 
 function showToast(msg) {
