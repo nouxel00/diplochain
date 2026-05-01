@@ -784,8 +784,7 @@ document.getElementById('d-mention').selectedIndex = 0;
         <div class="copy-hint">Cliquez pour copier</div>
       `);
     } else {
-      showResult('result-admin', 'error', `<div class="result-title">Erreur</div><div style="font-size:0.85rem;color:#ccc;">${data.erreur}</div>`);
-    }
+      showResult('result-admin', 'error', `<div class="result-title">Erreur</div><div style="font-size:0.85rem;color:#ccc;">Accréditation échouée. Vérifiez l'adresse wallet et réessayez.</div>`);}
   } catch(e) {
     showResult('result-admin', 'error', `<div class="result-title">Erreur de connexion</div><div style="font-size:0.85rem;color:#ccc;">Impossible de joindre l'API DiploChain.</div>`);
   }
