@@ -702,12 +702,22 @@ const API = 'https://diplochain.onrender.com';
 document.addEventListener('DOMContentLoaded', function() {
   showPage('dashboard');
 });
-
+function resetForm(pageName) {
+  const page = document.getElementById('page-' + pageName);
+  if (!page) return;
+  page.querySelectorAll('input').forEach(i => i.value = '');
+  page.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  page.querySelectorAll('.result-box').forEach(r => {
+    r.style.display = 'none';
+    r.className = 'result-box';
+    r.innerHTML = '';
+  });
+  }
 function showPage(name, el, isMobile) {
   // Afficher la bonne page
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-
+resetForm(name); // ← ligne ajoutée
   // Mettre à jour la nav desktop
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   const tabs = {'dashboard':0,'admin':1,'emit':2,'verify':3};
@@ -763,6 +773,9 @@ async function accrediter() {
     });
     const data = await res.json();
     if (data.success) {
+      ['d-nom','d-prenom','d-filiere','d-annee'].forEach(id => document.getElementById(id).value = '');
+document.getElementById('d-niveau').selectedIndex = 0;
+document.getElementById('d-mention').selectedIndex = 0;
       showResult('result-admin', 'success', `
         <div class="result-title">Établissement accrédité</div>
         <div style="font-size:0.85rem;color:#ccc;margin-bottom:8px;">${nom} peut désormais émettre des diplômes sur la blockchain.</div>
@@ -799,6 +812,8 @@ async function emettre() {
     });
     const data = await res.json();
     if (data.success) {
+     document.getElementById('etab-adresse').value = '';
+document.getElementById('etab-nom').value = '';
       showResult('result-emit', 'success', `
         <div class="result-title">Diplôme enregistré sur la blockchain</div>
         <div style="font-size:0.85rem;color:black;margin-bottom:12px;">
@@ -832,6 +847,7 @@ async function verifier() {
     const res = await fetch(API + '/verifier/' + hash);
     const data = await res.json();
     if (data.success) {
+     document.getElementById('v-hash').value = '';
       const validClass = data.estValide ? 'valid' : 'invalid';
       const validLabel = data.estValide ? 'Diplôme valide' : 'Diplôme révoqué';
       showResult('result-verify', data.estValide ? 'success' : 'error', `
