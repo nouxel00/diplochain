@@ -198,7 +198,7 @@
 
   input, select {
     background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(201,168,76,0.2);
+    border: 1px --blue-light;
     border-radius: 9px;
     padding: 11px 14px;
     color:#000000;
@@ -801,7 +801,7 @@ async function emettre() {
     if (data.success) {
       showResult('result-emit', 'success', `
         <div class="result-title">Diplôme enregistré sur la blockchain</div>
-        <div style="font-size:0.85rem;color:#ccc;margin-bottom:12px;">
+        <div style="font-size:0.85rem;color:black;margin-bottom:12px;">
           Le diplôme de <strong>${prenom} ${nom}</strong> a été signé et gravé de façon permanente et infalsifiable.
         </div>
         <div style="font-size:0.72rem;color:var(--muted);margin-bottom:4px;">Hash du diplôme (à transmettre au diplômé) :</div>
@@ -857,7 +857,7 @@ async function verifier() {
     } else {
       showResult('result-verify', 'error', `
         <div class="result-title">Diplôme introuvable</div>
-        <div style="font-size:0.85rem;color:#ccc;line-height:1.6;">
+        <div style="font-size:0.85rem;color:black;line-height:1.6;">
           Aucun diplôme ne correspond à ce hash sur la blockchain.<br>
           Ce document <strong>n'est pas authentique</strong> ou le hash est incorrect.
         </div>
